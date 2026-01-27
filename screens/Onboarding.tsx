@@ -315,7 +315,7 @@ export const OnboardingScreen = ({ theme, navigate, setUser }: Props) => {
                <div className="space-y-6">
                   <button
                      onClick={() => { triggerHaptic(); setStep(2); }}
-                     className={`w-full bg-[#00D68F] text-black py-4 rounded-full font-bold text-lg active:scale-[0.98] transition-all shadow-xl hover:shadow-[#00D68F]/30 hover:scale-[1.02]`}
+                     className={`w-full bg-[#00D68F] text-black py-4 rounded-full font-bold text-lg active:scale-98 transition-all shadow-xl hover:shadow-[#00D68F]/30 hover:scale-[1.01]`}
                   >
                      Get Started
                   </button>
@@ -412,7 +412,7 @@ export const OnboardingScreen = ({ theme, navigate, setUser }: Props) => {
                <button
                   onClick={() => verifyOTP()}
                   disabled={otp.length < 6 || loading}
-                  className={`w-full bg-[#00D68F] text-black py-4 rounded-full font-semibold text-lg disabled:opacity-30 shadow-lg flex items-center justify-center transition-transform active:scale-95`}
+                  className={`w-full bg-[#00D68F] text-black py-4 rounded-full font-semibold text-lg disabled:opacity-30 shadow-lg flex items-center justify-center transition-transform active:scale-98`}
                >
                   {loading ? <Loader2 className="animate-spin" /> : 'Verify Code'}
                </button>

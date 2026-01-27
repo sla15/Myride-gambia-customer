@@ -1,11 +1,13 @@
 
 import React, { useState, useEffect, useRef } from 'react';
+import './index.css';
 import { createRoot } from 'react-dom/client';
 import { Theme, Screen, CartItem, Business, Activity, UserData, Category, AppSettings } from './types';
 import { INITIAL_BUSINESSES } from './data';
 import { SmartAssistant } from './components/SmartAssistant';
 import { Sidebar } from './components/Navigation';
 import { SplashScreen } from './components/SplashScreen'; // Import Splash
+import { FloatingCartButton } from './components/FloatingCartButton';
 import { CONFIG } from './config';
 import { supabase } from './supabaseClient';
 
@@ -70,7 +72,15 @@ const App = () => {
   const [isLoading, setIsLoading] = useState(true); // Splash Screen State
   const [screen, setScreen] = useState<Screen | null>(null); // Start as null to avoid flash
 
-  const [cart, setCart] = useState<CartItem[]>([]);
+  const [cart, setCart] = useState<CartItem[]>(() => {
+    const saved = localStorage.getItem('app_cart');
+    return saved ? JSON.parse(saved) : [];
+  });
+
+  useEffect(() => {
+    localStorage.setItem('app_cart', JSON.stringify(cart));
+  }, [cart]);
+
   const [businesses, setBusinesses] = useState<Business[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [favorites, setFavorites] = useState<string[]>([]);
@@ -518,6 +528,14 @@ const App = () => {
           <div key={screen} className="h-full w-full animate-scale-in">
             {screen && renderScreen()}
           </div>
+
+          {!isLoading && screen !== 'ride' && screen !== 'checkout' && (
+            <FloatingCartButton
+              cart={cart}
+              theme={theme}
+              onClick={() => navigate('checkout', true)}
+            />
+          )}
 
           {/* Persistent Ride Layer */}
           <div className={`absolute inset-0 z-[5] ${screen === 'ride' ? 'block' : 'hidden'}`}>

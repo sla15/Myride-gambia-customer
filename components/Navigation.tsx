@@ -25,14 +25,14 @@ export const BottomNav = ({ active, navigate, theme, isScrolling }: NavProps) =>
         `}
             >
 
-                <button onClick={() => navigate('ride')} className="flex flex-1 flex-col items-center gap-1.5 active:scale-90 transition-transform">
+                <button onClick={() => navigate('ride')} className="flex flex-1 flex-col items-center gap-1.5 active:scale-98 transition-transform">
                     <Car size={isScrolling ? 22 : 20} className={active === 'ride' ? 'text-[#00D68F]' : 'opacity-40'} strokeWidth={active === 'ride' ? 2.5 : 2} />
                     <div className={`transition-all duration-300 ${isScrolling ? 'h-0 opacity-0 overflow-hidden' : 'h-4 opacity-100'}`}>
                         <span className={`text-[10px] font-bold ${active === 'ride' ? 'text-[#00D68F]' : 'opacity-40'}`}>Ride</span>
                     </div>
                 </button>
 
-                <button onClick={() => navigate('marketplace')} className="flex flex-1 flex-col items-center gap-1.5 active:scale-90 transition-transform">
+                <button onClick={() => navigate('marketplace')} className="flex flex-1 flex-col items-center gap-1.5 active:scale-98 transition-transform">
                     <ShoppingBag size={isScrolling ? 22 : 20} className={active === 'marketplace' ? 'text-[#00D68F]' : 'opacity-40'} strokeWidth={active === 'marketplace' ? 2.5 : 2} />
                     <div className={`transition-all duration-300 ${isScrolling ? 'h-0 opacity-0 overflow-hidden' : 'h-4 opacity-100'}`}>
                         <span className={`text-[10px] font-bold ${active === 'marketplace' ? 'text-[#00D68F]' : 'opacity-40'}`}>Market</span>
@@ -42,20 +42,20 @@ export const BottomNav = ({ active, navigate, theme, isScrolling }: NavProps) =>
                 <div className="relative w-12 flex justify-center">
                     <button
                         onClick={() => navigate('dashboard')}
-                        className={`absolute w-14 h-14 rounded-full flex items-center justify-center shadow-lg border-[4px] transition-all duration-500 active:scale-95 ${theme === 'light' ? 'bg-[#00D68F] text-black border-[#F2F2F7]' : 'bg-[#00D68F] text-black border-black'} -top-8 scale-100`}
+                        className={`absolute w-14 h-14 rounded-full flex items-center justify-center shadow-lg border-[4px] transition-all duration-500 active:scale-98 ${theme === 'light' ? 'bg-[#00D68F] text-black border-[#F2F2F7]' : 'bg-[#00D68F] text-black border-black'} -top-8 scale-100`}
                     >
                         <Home size={24} fill="currentColor" strokeWidth={2.5} />
                     </button>
                 </div>
 
-                <button onClick={() => navigate('profile')} className="flex flex-1 flex-col items-center gap-1.5 active:scale-90 transition-transform">
+                <button onClick={() => navigate('profile')} className="flex flex-1 flex-col items-center gap-1.5 active:scale-98 transition-transform">
                     <User size={isScrolling ? 22 : 20} className={active === 'profile' ? 'text-[#00D68F]' : 'opacity-40'} strokeWidth={active === 'profile' ? 2.5 : 2} />
                     <div className={`transition-all duration-300 ${isScrolling ? 'h-0 opacity-0 overflow-hidden' : 'h-4 opacity-100'}`}>
                         <span className={`text-[10px] font-bold ${active === 'profile' ? 'text-[#00D68F]' : 'opacity-40'}`}>Profile</span>
                     </div>
                 </button>
 
-                <button onClick={() => navigate('earn')} className="flex flex-1 flex-col items-center gap-1.5 active:scale-90 transition-transform">
+                <button onClick={() => navigate('earn')} className="flex flex-1 flex-col items-center gap-1.5 active:scale-98 transition-transform">
                     <Gift size={isScrolling ? 22 : 20} className={active === 'earn' ? 'text-[#00D68F]' : 'opacity-40'} strokeWidth={active === 'earn' ? 2.5 : 2} />
                     <div className={`transition-all duration-300 ${isScrolling ? 'h-0 opacity-0 overflow-hidden' : 'h-4 opacity-100'}`}>
                         <span className={`text-[10px] font-bold ${active === 'earn' ? 'text-[#00D68F]' : 'opacity-40'}`}>Gifts</span>

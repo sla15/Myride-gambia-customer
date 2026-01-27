@@ -3,6 +3,7 @@ import { ArrowLeft, MapPin, ChevronRight, Truck, Plus, Minus, Trash2, Copy, Chec
 import { Theme, Screen, CartItem, UserData, AppSettings } from '../types';
 import { triggerHaptic } from '../index';
 import { supabase } from '../supabaseClient';
+import { LocationPicker } from '../components/LocationPicker';
 
 interface Props {
     theme: Theme;
@@ -19,6 +20,13 @@ export const CheckoutScreen = ({ theme, navigate, goBack, cart, setCart, user, s
     const [merchants, setMerchants] = useState<Record<string, { name: string, phone: string }>>({});
     const [copiedId, setCopiedId] = useState<string | null>(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [showPicker, setShowPicker] = useState(false);
+    const [deliveryLocation, setDeliveryLocation] = useState<{ address: string; lat: number; lng: number }>({
+        address: user.location || 'Banjul, The Gambia',
+        lat: 13.4432,
+        lng: -16.6322
+    });
+
 
     const uniqueBusinessIds = Array.from(new Set(cart.map(item => item.businessId)));
     const multiStopFee = (uniqueBusinessIds.length - 1) * 30; // D30 for each extra stop
@@ -118,7 +126,7 @@ export const CheckoutScreen = ({ theme, navigate, goBack, cart, setCart, user, s
                         total_amount: orderTotal,
                         status: 'pending',
                         delivery_instructions: deliveryNote,
-                        delivery_address: user.location
+                        delivery_address: deliveryLocation.address
                     })
                     .select()
                     .single();
@@ -170,20 +178,21 @@ export const CheckoutScreen = ({ theme, navigate, goBack, cart, setCart, user, s
                         <MapPin size={16} className="text-[#00D68F]" /> Dropoff Location
                     </h2>
                     <div
-                        onClick={() => { triggerHaptic(); alert("Location selection would open here."); }}
+                        onClick={() => { triggerHaptic(); setShowPicker(true); }}
                         className={`flex items-center justify-between p-3 rounded-xl ${inputBg} cursor-pointer active:opacity-80`}
                     >
                         <div className="flex items-center gap-3">
                             <div className="w-8 h-8 rounded-full bg-white dark:bg-black flex items-center justify-center">
                                 <MapPin size={16} />
                             </div>
-                            <div>
-                                <div className="text-sm font-bold">Home</div>
-                                <div className={`text-xs ${textSec}`}>{user.location}</div>
+                            <div className="flex-1 min-w-0">
+                                <div className="text-sm font-bold">Delivery Spot</div>
+                                <div className={`text-xs ${textSec} truncate`}>{deliveryLocation.address}</div>
                             </div>
                         </div>
                         <ChevronRight size={16} className="opacity-40" />
                     </div>
+
 
                     <div className="mt-4">
                         <label className={`text-xs font-bold ${textSec} mb-2 block`}>Delivery Instructions</label>
@@ -324,6 +333,16 @@ export const CheckoutScreen = ({ theme, navigate, goBack, cart, setCart, user, s
                     <span>D{total.toFixed(2)}</span>
                 </button>
             </div>
+
+            {showPicker && (
+                <LocationPicker
+                    theme={theme}
+                    onConfirm={(loc) => { setDeliveryLocation(loc); setShowPicker(false); }}
+                    onClose={() => setShowPicker(false)}
+                    title="Set Delivery Location"
+                    initialLocation={{ lat: deliveryLocation.lat, lng: deliveryLocation.lng }}
+                />
+            )}
         </div>
     );
 };

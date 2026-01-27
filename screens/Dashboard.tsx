@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect, useRef } from 'react';
-import { Sun, Moon, Search, Car, MapPin, ShoppingBag, Star, Trash2, X, Plus, ArrowRight, Loader2, Map as MapIcon } from 'lucide-react';
+import { Sun, Moon, Search, Car, MapPin, ShoppingBag, Star, Trash2, X, Plus, ArrowRight, Loader2, Map as MapIcon, Gift } from 'lucide-react';
 import { Theme, Screen, UserData, Activity, Business, SavedLocation, AppSettings } from '../types';
 import { triggerHaptic, GreenGlow } from '../index';
 import { BottomNav } from '../components/Navigation';
@@ -243,7 +243,7 @@ export const DashboardScreen = ({ user, theme, navigate, toggleTheme, setShowAss
               setSearchQuery('');
               setPredictions([]);
             }}
-            className={`h-14 w-14 rounded-2xl flex items-center justify-center transition-all ${searchMode === 'market' ? 'bg-[#FF9500]/10 text-[#FF9500]' : 'bg-[#00D68F]/10 text-[#00D68F]'} shadow-sm active:scale-95 border-2 border-transparent hover:border-current`}
+            className={`h-14 w-14 rounded-2xl flex items-center justify-center transition-all ${searchMode === 'market' ? 'bg-[#FF9500]/10 text-[#FF9500]' : 'bg-[#00D68F]/10 text-[#00D68F]'} shadow-sm active:scale-98 border-2 border-transparent hover:border-current`}
           >
             {searchMode === 'market' ? <ShoppingBag size={24} /> : <MapIcon size={24} />}
           </button>
@@ -264,7 +264,7 @@ export const DashboardScreen = ({ user, theme, navigate, toggleTheme, setShowAss
               </div>
               <button
                 onClick={() => navigate('earn')}
-                className={`px-4 py-2 rounded-xl bg-[#00D68F] text-black text-xs font-bold active:scale-95 transition-all`}
+                className={`px-4 py-2 rounded-xl bg-[#00D68F] text-black text-xs font-bold active:scale-98 transition-all`}
               >
                 Use Now
               </button>

@@ -174,16 +174,24 @@ export const RideScreen = ({ theme, navigate, goBack, setRecentActivity, user, p
         if (!map) return;
 
         const getVehicleIcon = (vType: string) => {
-            const iconRoot = '/assets/';
-            let iconName = 'car_economic_backup.png'; // Default top-down
+            const iconRoot = '/assets/drivers%20vehicle%20types/';
+            let iconName = 'car_economic_3d_backup.png';
+            let markerClass = 'driver-marker';
 
-            if (vType === 'prem') iconName = 'car_premium.png';
-            if (vType === 'moto') iconName = 'car_scooter.png';
+            if (vType === 'prem') {
+                iconName = 'car_premium_3d_backup.png';
+                markerClass = 'driver-marker driver-marker-prem';
+            }
+            if (vType === 'moto') {
+                iconName = 'car_scooter_3d_backup.png';
+                markerClass = 'driver-marker driver-marker-moto';
+            }
 
             return {
                 url: `${iconRoot}${iconName}`,
-                scaledSize: new (window as any).google.maps.Size(40, 40),
-                anchor: new (window as any).google.maps.Point(20, 20)
+                scaledSize: new (window as any).google.maps.Size(50, 50),
+                anchor: new (window as any).google.maps.Point(25, 25),
+                className: markerClass // Custom property to apply CSS via OverlayView if needed, or just standard marker
             };
         };
 
@@ -196,11 +204,19 @@ export const RideScreen = ({ theme, navigate, goBack, setRecentActivity, user, p
             if (data) {
                 const newDriverMarkers = new Map();
                 data.forEach(d => {
+                    const icon = getVehicleIcon(d.vehicle_type || 'eco');
                     const marker = new (window as any).google.maps.Marker({
                         position: { lat: d.current_lat, lng: d.current_lng },
                         map: map,
-                        icon: getVehicleIcon(d.vehicle_type || 'eco'),
-                        title: `Driver ${d.id}`
+                        icon: {
+                            url: icon.url,
+                            scaledSize: icon.scaledSize,
+                            anchor: icon.anchor
+                        },
+                        title: `Driver ${d.id}`,
+                        // Note: Standard Google Maps Marker doesn't easily support className for animation
+                        // BUT we can use the 'optimized: false' flag to ensure they are rendered as DOM elements
+                        optimized: false
                     });
                     newDriverMarkers.set(d.id, marker);
                 });
@@ -239,11 +255,17 @@ export const RideScreen = ({ theme, navigate, goBack, setRecentActivity, user, p
                             if (marker) {
                                 marker.setPosition(position);
                             } else {
+                                const icon = getVehicleIcon(updatedDriver.vehicle_type || 'eco');
                                 marker = new (window as any).google.maps.Marker({
                                     position: position,
                                     map: map,
-                                    icon: getVehicleIcon(updatedDriver.vehicle_type || 'eco'),
-                                    title: `Driver ${updatedDriver.id}`
+                                    icon: {
+                                        url: icon.url,
+                                        scaledSize: icon.scaledSize,
+                                        anchor: icon.anchor
+                                    },
+                                    title: `Driver ${updatedDriver.id}`,
+                                    optimized: false
                                 });
                                 next.set(updatedDriver.id, marker);
                             }

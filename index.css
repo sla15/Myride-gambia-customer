@@ -1,6 +1,5 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+@config "./tailwind.config.js";
 
 /* Screen Transitions */
 .screen-fade-enter {
@@ -58,4 +57,36 @@
   bottom: 0;
   width: 100%;
   height: 100%;
+}
+
+/* Driver Icon Floating and Glow Effect - Targeting image src since Marker class isn't reliable */
+img[src*="drivers%20vehicle%20types"] {
+  filter: drop-shadow(0 0 12px rgba(0, 214, 143, 0.7));
+  animation: marker-float 2.5s ease-in-out infinite;
+  transform-origin: center bottom;
+  border-radius: 50%;
+  /* Helps with the glow shape */
+}
+
+@keyframes marker-float {
+
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+
+  50% {
+    transform: translateY(-10px) scale(1.1);
+    opacity: 0.9;
+  }
+}
+
+/* Specific glows for different vehicles */
+img[src*="car_premium"] {
+  filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.5));
+}
+
+img[src*="car_scooter"] {
+  filter: drop-shadow(0 0 12px rgba(59, 130, 246, 0.6));
 }
