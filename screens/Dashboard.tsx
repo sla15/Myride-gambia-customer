@@ -142,7 +142,7 @@ export const DashboardScreen = ({ user, theme, navigate, toggleTheme, setShowAss
 
   const handleMapSearch = (val: string) => {
     setSearchQuery(val);
-    if (searchMode !== 'maps' || !val.trim()) {
+    if (searchMode !== 'maps' || !val.trim() || val.length < 3) {
       setPredictions([]);
       return;
     }
@@ -154,7 +154,8 @@ export const DashboardScreen = ({ user, theme, navigate, toggleTheme, setShowAss
 
     if (searchTimeout.current) clearTimeout(searchTimeout.current);
     searchTimeout.current = setTimeout(() => {
-      const service = new (window as any).google.maps.places.AutocompleteService();
+      const google = (window as any).google;
+      const service = new google.maps.places.AutocompleteService();
       service.getPlacePredictions({
         input: val,
         sessionToken: sessionToken.current,
@@ -162,13 +163,20 @@ export const DashboardScreen = ({ user, theme, navigate, toggleTheme, setShowAss
       }, (preds: any) => {
         setPredictions(preds || []);
       });
-    }, 300);
+    }, 500); // Increased debounce to 500ms
   };
 
   const selectMapPrediction = (pred: any) => {
+    const google = (window as any).google;
     setSearchQuery(pred.description);
     setPredictions([]);
     setPrefilledDestination(pred.description);
+
+    // Refresh session token for the next sequence
+    if (google) {
+      sessionToken.current = new google.maps.places.AutocompleteSessionToken();
+    }
+
     triggerHaptic();
     navigate('ride');
   };

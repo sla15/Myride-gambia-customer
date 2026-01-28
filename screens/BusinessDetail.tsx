@@ -1,6 +1,6 @@
 
 import React, { useState, useMemo } from 'react';
-import { ArrowLeft, Star, Plus, ThumbsUp, MessageCircle } from 'lucide-react';
+import { ArrowLeft, Star, Plus, ThumbsUp, MessageCircle, Loader2 } from 'lucide-react';
 import { Theme, Screen, Business, Product, CartItem } from '../types';
 import { triggerHaptic } from '../index';
 import { supabase } from '../supabaseClient';
@@ -104,7 +104,7 @@ export const BusinessDetailScreen = ({ theme, navigate, goBack, selectedBusiness
                 {/* Consistent Back Button Style */}
                 <button
                     onClick={goBack}
-                    className="absolute top-safe left-4 w-10 h-10 bg-black/30 backdrop-blur-md border border-white/20 rounded-full flex items-center justify-center text-white z-20 active:scale-90 transition-transform"
+                    className="absolute top-safe left-4 w-10 h-10 bg-black/30 backdrop-blur-md border border-white/20 rounded-full flex items-center justify-center text-white z-20 active:scale-98 transition-transform"
                 >
                     <ArrowLeft size={20} />
                 </button>
@@ -142,7 +142,7 @@ export const BusinessDetailScreen = ({ theme, navigate, goBack, selectedBusiness
                 <h2 className="font-bold text-xl mb-4 px-2">{selectedFilter === 'All' ? 'Menu' : selectedFilter}</h2>
 
                 <div className="space-y-4 mb-8">
-                    {filteredProducts.length > 0 ? (
+                    {selectedBusiness.products && selectedBusiness.products.length > 0 ? (
                         filteredProducts.map(p => (
                             <ProductCard key={p.id} product={p} addToCart={addToCart} theme={theme} bgCard={bgCard} textSec={textSec} />
                         ))

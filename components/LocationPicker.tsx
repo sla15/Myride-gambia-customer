@@ -101,11 +101,17 @@ export const LocationPicker = ({ theme, onConfirm, onClose, title = "Select Loca
 
     const handleSearch = (val: string) => {
         setAddress(val);
-        if (!val) { setPredictions([]); return; }
+        if (!val || val.length < 3) {
+            setPredictions([]);
+            return;
+        }
 
         if (searchTimeout.current) clearTimeout(searchTimeout.current);
         searchTimeout.current = setTimeout(() => {
-            const service = new (window as any).google.maps.places.AutocompleteService();
+            const google = (window as any).google;
+            if (!google) return;
+
+            const service = new google.maps.places.AutocompleteService();
             service.getPlacePredictions({
                 input: val,
                 sessionToken,
@@ -113,11 +119,14 @@ export const LocationPicker = ({ theme, onConfirm, onClose, title = "Select Loca
             }, (preds: any) => {
                 setPredictions(preds || []);
             });
-        }, 300);
+        }, 500); // Increased debounce to 500ms
     };
 
     const selectPrediction = (pred: any) => {
-        const geocoder = new (window as any).google.maps.Geocoder();
+        const google = (window as any).google;
+        if (!google) return;
+
+        const geocoder = new google.maps.Geocoder();
         geocoder.geocode({ placeId: pred.place_id }, (results: any, status: string) => {
             if (status === 'OK' && results[0]) {
                 const loc = results[0].geometry.location;
@@ -128,6 +137,9 @@ export const LocationPicker = ({ theme, onConfirm, onClose, title = "Select Loca
                 setSelectedCoords(coords);
                 setAddress(results[0].formatted_address);
                 setPredictions([]);
+
+                // Refresh session token for the next search sequence to save cost
+                setSessionToken(new google.maps.places.AutocompleteSessionToken());
             }
         });
     };
