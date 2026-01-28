@@ -15,7 +15,7 @@ export const FloatingCartButton = ({ cart, theme, onClick }: Props) => {
     const [rel, setRel] = useState({ x: 0, y: 0 });
     const buttonRef = useRef<HTMLDivElement>(null);
 
-    if (cart.length === 0) return null;
+    // Moved conditional return to after hooks
 
     const totalItems = cart.reduce((acc, item) => acc + item.quantity, 0);
     const totalPrice = cart.reduce((acc, item) => acc + (item.price * item.quantity), 0);
@@ -69,6 +69,8 @@ export const FloatingCartButton = ({ cart, theme, onClick }: Props) => {
             window.removeEventListener('touchend', onMouseUp);
         };
     }, [isDragging]);
+
+    if (cart.length === 0) return null;
 
     const bg = theme === 'light' ? 'bg-black' : 'bg-white';
     const text = theme === 'light' ? 'text-white' : 'text-black';
