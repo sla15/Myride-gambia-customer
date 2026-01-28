@@ -25,12 +25,6 @@ interface Props {
   settings: AppSettings;
 }
 
-const generateUUID = () => {
-  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-    const r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
-    return v.toString(16);
-  });
-};
 
 
 export const DashboardScreen = ({ user, theme, navigate, toggleTheme, setShowAssistant, favorites, businesses, recentActivity, setRecentActivity, setSelectedBusiness, isScrolling, handleScroll, setPrefilledDestination, setMarketSearchQuery, settings }: Props) => {
@@ -158,8 +152,9 @@ export const DashboardScreen = ({ user, theme, navigate, toggleTheme, setShowAss
     if (!(window as any).google) return;
 
     // Start session if not exists
-    if (!sessionToken.current) {
-      sessionToken.current = generateUUID();
+    const google = (window as any).google;
+    if (!sessionToken.current && google) {
+      sessionToken.current = new google.maps.places.AutocompleteSessionToken();
       console.log("Maps Dash: Started new session");
     }
 
@@ -241,7 +236,10 @@ export const DashboardScreen = ({ user, theme, navigate, toggleTheme, setShowAss
               value={searchQuery}
               onFocus={() => {
                 if (searchMode === 'maps' && !sessionToken.current) {
-                  sessionToken.current = generateUUID();
+                  const google = (window as any).google;
+                  if (google) {
+                    sessionToken.current = new google.maps.places.AutocompleteSessionToken();
+                  }
                 }
               }}
               onChange={(e) => searchMode === 'market' ? setSearchQuery(e.target.value) : handleMapSearch(e.target.value)}

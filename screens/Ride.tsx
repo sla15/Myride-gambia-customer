@@ -6,12 +6,6 @@ import { triggerHaptic, sendPushNotification } from '../index';
 import { CONFIG } from '../config';
 import { supabase } from '../supabaseClient';
 
-const generateUUID = () => {
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-        const r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
-        return v.toString(16);
-    });
-};
 
 interface Props {
     theme: Theme;
@@ -472,8 +466,11 @@ export const RideScreen = ({ theme, navigate, goBack, setRecentActivity, user, p
         if (autocompleteService.current) {
             // Start session if not exists
             if (!sessionToken.current) {
-                sessionToken.current = generateUUID();
-                console.log("Maps Ride: Started new session");
+                const google = (window as any).google;
+                if (google) {
+                    sessionToken.current = new google.maps.places.AutocompleteSessionToken();
+                    console.log("Maps Ride: Started new session");
+                }
             }
 
             autocompleteService.current.getPlacePredictions({
@@ -1007,7 +1004,10 @@ export const RideScreen = ({ theme, navigate, goBack, setRecentActivity, user, p
                                                             onFocus={() => {
                                                                 setActiveInputIndex(idx);
                                                                 if (!sessionToken.current) {
-                                                                    sessionToken.current = generateUUID();
+                                                                    const google = (window as any).google;
+                                                                    if (google) {
+                                                                        sessionToken.current = new google.maps.places.AutocompleteSessionToken();
+                                                                    }
                                                                 }
                                                             }}
                                                         />

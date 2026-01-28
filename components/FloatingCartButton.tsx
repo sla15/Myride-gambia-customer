@@ -87,7 +87,7 @@ export const FloatingCartButton = ({ cart, theme, onClick }: Props) => {
                     onClick();
                 }
             }}
-            className={`fixed bottom-6 right-6 z-50 flex items-center gap-3 ${bg} ${text} px-4 py-3 rounded-full shadow-2xl cursor-move active:scale-98 transition-transform animate-scale-in blur-none select-none`}
+            className={`fixed bottom-24 right-6 z-50 flex items-center gap-3 ${bg} ${text} px-4 py-3 rounded-full shadow-2xl cursor-move active:scale-98 transition-transform animate-scale-in blur-none select-none`}
             style={{
                 filter: 'drop-shadow(0 0 10px rgba(0, 214, 143, 0.3))',
                 transform: `translate(${position.x}px, ${position.y}px)`

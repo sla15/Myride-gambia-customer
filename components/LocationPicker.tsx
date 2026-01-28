@@ -4,13 +4,6 @@ import { Search, MapPin, Map as MapIcon, Locate, X, ArrowRight, Loader2 } from '
 import { Theme } from '../types';
 import { triggerHaptic } from '../index';
 
-// Helper for generating standard UUID tokens
-const generateUUID = () => {
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-        const r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
-        return v.toString(16);
-    });
-};
 
 interface Props {
     theme: Theme;
@@ -98,8 +91,9 @@ export const LocationPicker = ({ theme, onConfirm, onClose, title = "Select Loca
     };
 
     const startNewSession = () => {
-        if (!sessionToken) {
-            setSessionToken(generateUUID());
+        const google = (window as any).google;
+        if (!sessionToken && google) {
+            setSessionToken(new google.maps.places.AutocompleteSessionToken());
             console.log("Maps: Started new search session");
         }
     };
@@ -124,6 +118,11 @@ export const LocationPicker = ({ theme, onConfirm, onClose, title = "Select Loca
         searchTimeout.current = setTimeout(() => {
             const google = (window as any).google;
             if (!google) return;
+
+            // Start session if not exists
+            if (!sessionToken.current) {
+                setSessionToken(new google.maps.places.AutocompleteSessionToken());
+            }
 
             const service = new google.maps.places.AutocompleteService();
             service.getPlacePredictions({
