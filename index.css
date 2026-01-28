@@ -93,11 +93,13 @@ img[src*="car_scooter"] {
 
 /* Navigation Animations */
 .nav-visible {
-  transform: translateY(0);
+  transform: translateY(0) scale(1);
   opacity: 1;
+  pointer-events: auto;
 }
 
 .nav-hidden {
-  transform: translateY(120%);
+  transform: translateY(140%) scale(0.95);
   opacity: 0;
+  pointer-events: none;
 }

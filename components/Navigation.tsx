@@ -21,23 +21,18 @@ export const BottomNav = ({ active, navigate, theme, isScrolling, isNavVisible =
           pointer-events-auto
           ${theme === 'light' ? 'bg-white/80 text-black border-white' : 'bg-[#1C1C1E]/80 text-white border-white/5'} 
           backdrop-blur-2xl rounded-[32px] px-2 shadow-2xl flex items-center justify-between relative border ring-1 ring-black/5
-          transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)]
-          ${isScrolling ? 'w-[320px] py-1.5' : 'w-[92%] md:w-[400px] py-3'}
+          w-[92%] md:w-[400px] py-3
         `}
             >
 
                 <button onClick={() => navigate('ride')} className="flex flex-1 flex-col items-center gap-1.5 active:scale-98 transition-transform">
-                    <Car size={isScrolling ? 22 : 20} className={active === 'ride' ? 'text-[#00D68F]' : 'opacity-40'} strokeWidth={active === 'ride' ? 2.5 : 2} />
-                    <div className={`transition-all duration-300 ${isScrolling ? 'h-0 opacity-0 overflow-hidden' : 'h-4 opacity-100'}`}>
-                        <span className={`text-[10px] font-bold ${active === 'ride' ? 'text-[#00D68F]' : 'opacity-40'}`}>Ride</span>
-                    </div>
+                    <Car size={20} className={active === 'ride' ? 'text-[#00D68F]' : 'opacity-40'} strokeWidth={active === 'ride' ? 2.5 : 2} />
+                    <span className={`text-[10px] font-bold ${active === 'ride' ? 'text-[#00D68F]' : 'opacity-40'}`}>Ride</span>
                 </button>
 
                 <button onClick={() => navigate('marketplace')} className="flex flex-1 flex-col items-center gap-1.5 active:scale-98 transition-transform">
-                    <ShoppingBag size={isScrolling ? 22 : 20} className={active === 'marketplace' ? 'text-[#00D68F]' : 'opacity-40'} strokeWidth={active === 'marketplace' ? 2.5 : 2} />
-                    <div className={`transition-all duration-300 ${isScrolling ? 'h-0 opacity-0 overflow-hidden' : 'h-4 opacity-100'}`}>
-                        <span className={`text-[10px] font-bold ${active === 'marketplace' ? 'text-[#00D68F]' : 'opacity-40'}`}>Market</span>
-                    </div>
+                    <ShoppingBag size={20} className={active === 'marketplace' ? 'text-[#00D68F]' : 'opacity-40'} strokeWidth={active === 'marketplace' ? 2.5 : 2} />
+                    <span className={`text-[10px] font-bold ${active === 'marketplace' ? 'text-[#00D68F]' : 'opacity-40'}`}>Market</span>
                 </button>
 
                 <div className="relative w-12 flex justify-center">
@@ -50,17 +45,13 @@ export const BottomNav = ({ active, navigate, theme, isScrolling, isNavVisible =
                 </div>
 
                 <button onClick={() => navigate('profile')} className="flex flex-1 flex-col items-center gap-1.5 active:scale-98 transition-transform">
-                    <User size={isScrolling ? 22 : 20} className={active === 'profile' ? 'text-[#00D68F]' : 'opacity-40'} strokeWidth={active === 'profile' ? 2.5 : 2} />
-                    <div className={`transition-all duration-300 ${isScrolling ? 'h-0 opacity-0 overflow-hidden' : 'h-4 opacity-100'}`}>
-                        <span className={`text-[10px] font-bold ${active === 'profile' ? 'text-[#00D68F]' : 'opacity-40'}`}>Profile</span>
-                    </div>
+                    <User size={20} className={active === 'profile' ? 'text-[#00D68F]' : 'opacity-40'} strokeWidth={active === 'profile' ? 2.5 : 2} />
+                    <span className={`text-[10px] font-bold ${active === 'profile' ? 'text-[#00D68F]' : 'opacity-40'}`}>Profile</span>
                 </button>
 
                 <button onClick={() => navigate('earn')} className="flex flex-1 flex-col items-center gap-1.5 active:scale-98 transition-transform">
-                    <Gift size={isScrolling ? 22 : 20} className={active === 'earn' ? 'text-[#00D68F]' : 'opacity-40'} strokeWidth={active === 'earn' ? 2.5 : 2} />
-                    <div className={`transition-all duration-300 ${isScrolling ? 'h-0 opacity-0 overflow-hidden' : 'h-4 opacity-100'}`}>
-                        <span className={`text-[10px] font-bold ${active === 'earn' ? 'text-[#00D68F]' : 'opacity-40'}`}>Gifts</span>
-                    </div>
+                    <Gift size={20} className={active === 'earn' ? 'text-[#00D68F]' : 'opacity-40'} strokeWidth={active === 'earn' ? 2.5 : 2} />
+                    <span className={`text-[10px] font-bold ${active === 'earn' ? 'text-[#00D68F]' : 'opacity-40'}`}>Gifts</span>
                 </button>
             </div>
         </div>

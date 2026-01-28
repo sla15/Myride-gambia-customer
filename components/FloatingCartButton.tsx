@@ -11,19 +11,20 @@ interface Props {
 
 export const FloatingCartButton = ({ cart, theme, onClick }: Props) => {
     const [isDragging, setIsDragging] = useState(false);
-    const [position, setPosition] = useState({ x: 0, y: 0 }); // Offset from default bottom-right
+    const [position, setPosition] = useState(() => {
+        const saved = localStorage.getItem('cart_pos');
+        return saved ? JSON.parse(saved) : { x: 0, y: 0 };
+    });
     const [rel, setRel] = useState({ x: 0, y: 0 });
+    const dragStartedAt = useRef(0);
     const buttonRef = useRef<HTMLDivElement>(null);
-
-    // Moved conditional return to after hooks
 
     const totalItems = cart.reduce((acc, item) => acc + item.quantity, 0);
     const totalPrice = cart.reduce((acc, item) => acc + (item.price * item.quantity), 0);
 
     const onMouseDown = (e: React.MouseEvent | React.TouchEvent) => {
-        if ((e.target as HTMLElement).closest('button')) return;
-
         setIsDragging(true);
+        dragStartedAt.current = Date.now();
         const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
         const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY;
 
@@ -40,14 +41,19 @@ export const FloatingCartButton = ({ cart, theme, onClick }: Props) => {
         const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
         const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY;
 
-        setPosition({
+        const newPos = {
             x: clientX - rel.x,
             y: clientY - rel.y
-        });
+        };
+
+        setPosition(newPos);
     };
 
     const onMouseUp = () => {
-        setIsDragging(false);
+        if (isDragging) {
+            setIsDragging(false);
+            localStorage.setItem('cart_pos', JSON.stringify(position));
+        }
     };
 
     useEffect(() => {
@@ -68,7 +74,7 @@ export const FloatingCartButton = ({ cart, theme, onClick }: Props) => {
             window.removeEventListener('touchmove', onMouseMove);
             window.removeEventListener('touchend', onMouseUp);
         };
-    }, [isDragging]);
+    }, [isDragging, rel, position]);
 
     if (cart.length === 0) return null;
 
@@ -81,16 +87,18 @@ export const FloatingCartButton = ({ cart, theme, onClick }: Props) => {
             onMouseDown={onMouseDown}
             onTouchStart={onMouseDown}
             onClick={(e) => {
-                // If we barely moved, treat as click
-                if (Math.abs(position.x) < 5 && Math.abs(position.y) < 5) {
+                const dragDuration = Date.now() - dragStartedAt.current;
+                // If it was a quick tap and didn't move much, it's a click
+                if (dragDuration < 200) {
                     triggerHaptic();
                     onClick();
                 }
             }}
-            className={`fixed bottom-24 right-6 z-50 flex items-center gap-3 ${bg} ${text} px-4 py-3 rounded-full shadow-2xl cursor-move active:scale-98 transition-transform animate-scale-in blur-none select-none`}
+            className={`fixed bottom-24 right-6 z-[60] flex items-center gap-3 ${bg} ${text} px-4 py-3 rounded-full shadow-2xl cursor-move active:scale-98 transition-transform animate-scale-in blur-none select-none ${isDragging ? 'scale-110 rotate-2' : ''}`}
             style={{
-                filter: 'drop-shadow(0 0 10px rgba(0, 214, 143, 0.3))',
-                transform: `translate(${position.x}px, ${position.y}px)`
+                filter: 'drop-shadow(0 0 15px rgba(0, 214, 143, 0.4))',
+                transform: `translate(${position.x}px, ${position.y}px)`,
+                transition: isDragging ? 'none' : 'transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), background-color 0.3s, scale 0.3s'
             }}
         >
             <div className="relative pointer-events-none">

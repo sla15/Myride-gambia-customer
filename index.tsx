@@ -500,7 +500,7 @@ const App = () => {
   const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
     const currentScrollY = e.currentTarget.scrollTop;
 
-    // Hide nav when scrolling down, show when scrolling up
+    // Hide nav when scrolling down, show only when scrolling up
     if (currentScrollY > lastScrollY.current && currentScrollY > 50) {
       if (isNavVisible) setIsNavVisible(false);
     } else if (currentScrollY < lastScrollY.current) {
@@ -513,9 +513,8 @@ const App = () => {
     if (scrollTimeout.current) clearTimeout(scrollTimeout.current);
     scrollTimeout.current = setTimeout(() => {
       setIsScrolling(false);
-      // Auto show nav when scroll stops for a bit (optional but feels safe)
-      setIsNavVisible(true);
-    }, 400); // Increased timeout for a more stable feel
+      // Removed the auto-show logic here to keep the navbar hidden until user scrolls up
+    }, 400);
   };
 
   const renderScreen = () => {
@@ -546,12 +545,12 @@ const App = () => {
       {isLoading && <SplashScreen theme={theme} />}
       {!isLoading && screen !== 'onboarding' && <Sidebar active={screen} navigate={navigate} theme={theme} />}
       <div className={`flex-1 relative flex justify-center bg-gray-100 dark:bg-black/50 overflow-hidden ${isLoading ? 'opacity-0' : 'opacity-100'} transition-opacity duration-500`}>
-        <div className="w-full h-full md:max-w-[480px] md:shadow-2xl md:border-x md:border-gray-200 dark:md:border-gray-800 bg-white dark:bg-black relative overflow-hidden">
+        <div className={`w-full h-full md:max-w-[480px] md:shadow-2xl md:border-x md:border-gray-200 dark:md:border-gray-800 ${theme === 'light' ? 'bg-white/95' : 'bg-black/95'} relative overflow-hidden`}>
           <div key={screen} className="h-full w-full animate-scale-in">
             {screen && renderScreen()}
           </div>
 
-          {!isLoading && screen !== 'ride' && screen !== 'checkout' && (
+          {!isLoading && screen !== 'onboarding' && screen !== 'ride' && screen !== 'checkout' && (
             <FloatingCartButton
               cart={cart}
               theme={theme}
